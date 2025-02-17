@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/31746556-dde1-4fde-b7e1-621d1d65d855)# Решение домашнего задания к занятию «Хранение в K8s. Часть 2»
+# Решение домашнего задания к занятию «Хранение в K8s. Часть 2»
 https://github.com/netology-code/kuber-homeworks/blob/main/2.2/2.2.md
 
 ## Задание 1.Создать Deployment приложения, использующего локальный PV, созданный вручную.
