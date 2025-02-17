@@ -89,7 +89,53 @@ sudo apt install nfs-common
 sudo microk8s enable community
 microk8s enable nfs
 ```
-Включить и настроить NFS-сервер на MicroK8S.
-Создать Deployment приложения состоящего из multitool, и подключить к нему PV, созданный автоматически на сервере NFS.
-Продемонстрировать возможность чтения и записи файла изнутри пода.
-Предоставить манифесты, а также скриншоты или вывод необходимых команд.
+### Манифест деплоймента
+```
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dpel-nfs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: app-nfs
+  template:
+    metadata:
+      labels:
+        app: multitool
+        type: app-nfs
+    spec:
+      containers:
+        - name: multitool
+          image: praqma/network-multitool:alpine-extra
+          volumeMounts:
+            - name:  nfs-vol
+              mountPath: "/data"
+      volumes:
+        - name:  nfs-vol
+          persistentVolumeClaim:
+            claimName: nfs-pvc
+```
+### Манифест pvc
+```
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc
+spec:
+  storageClassName: nfs
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi
+```
+### Запись в файл внутри контейнера
+![image](https://github.com/user-attachments/assets/7e7891c4-72de-49e5-a6c9-9b5d7cdf5be2)
+### Все PV и PVC задания
+![image](https://github.com/user-attachments/assets/8a55fec2-fa90-4990-9df0-8668f4619efe)
+
+
