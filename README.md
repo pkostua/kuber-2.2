@@ -4,8 +4,70 @@ https://github.com/netology-code/kuber-homeworks/blob/main/2.2/2.2.md
 ## Задание 1.Создать Deployment приложения, использующего локальный PV, созданный вручную.
 
 ### Манифест деплоймента
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: depl-volume
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: app-pv
+  template:
+    metadata:
+      labels:
+        app: multitool
+        type: app-pv
+    spec:
+      containers:
+        - name: multitool
+          image: praqma/network-multitool:alpine-extra
+          volumeMounts:
+            - name:  shared-vol
+              mountPath: "/data"
+        - name: busy-writer
+          image: busybox:1.36.1
+          command: ['sh', '-c', "until false; do date >> /data/test.txt; sleep 5; done"]
+          volumeMounts:
+            - name:  shared-vol
+              mountPath: "/data"
+      volumes:
+        - name:  shared-vol
+          persistentVolumeClaim:
+            claimName: pvc-host
+```
 ### Манифест pv
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: shared-pv
+spec:
+  capacity:
+    storage: 10Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local
+  hostPath:
+    path:  /data
+```
 ### Манифест pvc
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-host
+spec:
+  storageClassName: "local"
+  accessModes:
+  - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 10Mi
+```
 ### Multitool читает файл
 ![image](https://github.com/user-attachments/assets/014416fd-cf8f-42e1-9947-d7938d5eb297)
 ### Файл лежит на локальном диске
