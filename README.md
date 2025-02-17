@@ -73,7 +73,8 @@ spec:
 ### Файл лежит на локальном диске
 ![image](https://github.com/user-attachments/assets/270cf2a4-ee4e-40d8-98a4-350e2f4ab724)
 ### Удаление Deployment и PVC, проверка файла
-![image](https://github.com/user-attachments/assets/4201fca0-0bee-42c5-9678-8cff6dd7f182)
+![image](https://github.com/user-attachments/assets/f7c39afe-e61e-489a-8b39-834082181593)
+
 ### Удаление PV, проверка файла
 ![image](https://github.com/user-attachments/assets/8f45e057-74a6-42b2-b10b-90fc2d19c68e)  
 После удаления PV локальные файлы остались на месте, все потому, что как видно на скриншоте выше, RECLAIM POLICY для нашего хранилища имеет значение Retain. Это значение меняется в параметре persistentVolumeReclaimPolicy. Вот три доступных значения для этого параметра:  
